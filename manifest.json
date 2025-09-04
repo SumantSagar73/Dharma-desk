@@ -2,9 +2,20 @@
   "manifest_version": 3,
   "name": "Dharma Desk",
   "version": "1.0.0",
-  "description": "This is my new project",
+  "description": "A beautiful personal dashboard with Dharma wisdom and productivity tools",
   "action": {
-    "default_icon": "icon.png"
+    "default_icon": {
+      "16": "icon_16.png",
+      "32": "icon_32.png",
+      "48": "icon_48.png",
+      "128": "icon_128.png"
+    }
+  },
+  "icons": {
+    "16": "icon_16.png",
+    "32": "icon_32.png",
+    "48": "icon_48.png",
+    "128": "icon_128.png"
   },
   "chrome_url_overrides": {
     "newtab": "index.html"

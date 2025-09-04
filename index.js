@@ -155,9 +155,26 @@ function updateGoalText(goalId, text) {
 }
 
 function updateProgressDisplay() {
-    const completedGoals = goals.filter(g => g.completed).length;
-    const totalGoals = goals.length;
+    // Only count goals that have text content
+    const goalsWithText = goals.filter(g => g.text && g.text.trim() !== '');
+    const completedGoals = goalsWithText.filter(g => g.completed).length;
+    const totalGoals = goalsWithText.length;
     const percentage = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+    
+    // Get progress widget element
+    const progressWidget = document.querySelector('.progress-widget');
+    
+    // Hide progress widget if no goals with text
+    if (totalGoals === 0) {
+        if (progressWidget) {
+            progressWidget.style.display = 'none';
+        }
+        return;
+    } else {
+        if (progressWidget) {
+            progressWidget.style.display = 'block';
+        }
+    }
     
     // Update stats
     const goalsCompletedEl = document.getElementById('goals-completed');
