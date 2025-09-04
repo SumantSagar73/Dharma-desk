@@ -350,21 +350,56 @@ function performSearch() {
     }
 }
 
-// Daily reminder functionality
-function updateDailyReminder() {
-    const reminders = [
-        "Don't forget to commit on GitHub today!",
-        "Remember to practice DSA problems daily.",
-        "Stay hydrated and take breaks while coding.",
-        "Push your progress to GitHub before bed.",
-        "Learn something new today!",
-        "Review your code and refactor if needed.",
-        "Document your learnings in a journal."
+// Daily reminder functionality with motivational quotes API
+async function updateDailyReminder() {
+    try {
+        // Try to fetch from motivational quotes API
+        const response = await fetch('https://api.quotegarden.io/api/v3/quotes/random');
+        if (response.ok) {
+            const data = await response.json();
+            if (data.status === 'success' && data.data) {
+                const quote = data.data.quoteText;
+                const author = data.data.quoteAuthor || 'Unknown';
+                document.getElementById('daily-reminder-text').textContent = `"${quote}" - ${author}`;
+                return;
+            }
+        }
+    } catch (error) {
+        console.log('Primary API failed, trying backup...');
+    }
+
+    try {
+        // Backup API - Quotable
+        const response = await fetch('https://api.quotable.io/random?tags=motivational|inspirational&maxLength=120');
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('daily-reminder-text').textContent = `"${data.content}" - ${data.author}`;
+            return;
+        }
+    } catch (error) {
+        console.log('Backup API failed, using fallback quotes...');
+    }
+
+    // Fallback to local motivational quotes if APIs fail
+    const fallbackQuotes = [
+        { text: "The only way to do great work is to love what you do", author: "Steve Jobs" },
+        { text: "Innovation distinguishes between a leader and a follower", author: "Steve Jobs" },
+        { text: "Stay hungry, stay foolish", author: "Steve Jobs" },
+        { text: "Code is like humor. When you have to explain it, it's bad", author: "Cory House" },
+        { text: "First, solve the problem. Then, write the code", author: "John Johnson" },
+        { text: "Experience is the name everyone gives to their mistakes", author: "Oscar Wilde" },
+        { text: "In order to be irreplaceable, one must always be different", author: "Coco Chanel" },
+        { text: "Java is to JavaScript what car is to Carpet", author: "Chris Heilmann" },
+        { text: "Knowledge is power", author: "Francis Bacon" },
+        { text: "Learning never exhausts the mind", author: "Leonardo da Vinci" },
+        { text: "The future belongs to those who learn more skills", author: "Jacob Morgan" },
+        { text: "Don't forget to commit your progress today!", author: "Developer Wisdom" },
+        { text: "Every expert was once a beginner", author: "Robin Sharma" },
+        { text: "Progress, not perfection", author: "Anonymous" }
     ];
     
-    const today = new Date().getDay();
-    const reminder = reminders[today % reminders.length];
-    document.getElementById('daily-reminder-text').textContent = `"${reminder}"`;
+    const randomQuote = fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
+    document.getElementById('daily-reminder-text').textContent = `"${randomQuote.text}" - ${randomQuote.author}`;
 }
 
 // Floating particles animation
