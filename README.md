@@ -14,21 +14,25 @@ I got tired of opening new tabs and seeing the same boring stuff. So I built som
 ## Features that I'm proud of
 
 **Goal Tracking That Actually Works**
+
 - Add up to 5 goals for the day (trust me, more than that is just setting yourself up for failure)
 - Check them off as you go and watch that satisfying progress circle fill up
 - Only counts goals you actually write down - no cheating with empty boxes!
 - Everything resets daily because fresh starts are important
 
 **Quick Access Links**
+
 - GitHub, YouTube, and Gmail right there when you need them
 - Hover effects that I spent way too much time perfecting
 - Colors that match each platform because details matter
 
 **Daily Wisdom**
+
 - Random Bhagavad Gita quotes that change daily
 - Sometimes you need a moment of reflection between checking emails
 
 **Search That Doesn't Suck**
+
 - Clean search bar that actually looks good
 - Works with whatever search engine you prefer
 - No tracking, no ads, just search
@@ -37,7 +41,7 @@ I got tired of opening new tabs and seeing the same boring stuff. So I built som
 
 1. Download or clone this repo (you know the drill)
 2. Open Chrome/Edge and go to extensions (chrome://extensions/)
-3. Turn on "Developer mode" 
+3. Turn on "Developer mode"
 4. Click "Load unpacked" and point it to this folder
 5. Boom! Your new tabs just got an upgrade
 
@@ -89,4 +93,4 @@ It's nothing revolutionary, just a small attempt to bring a bit more intentional
 
 Built with care (and probably too much coffee) by [SumantSagar73](https://github.com/SumantSagar73)
 
-*May your goals be clear and your wisdom timeless* ✨
+_May your goals be clear and your wisdom timeless_ ✨

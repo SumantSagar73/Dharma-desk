@@ -1,92 +1,131 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="index.css">
-        <title>Dharma Desk</title>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <!-- Top Section -->
-        <header class="top-section">
-            <div class="search-container">
-                <input type="text" id="search-bar" placeholder="Search anything...">
-                <button id="search-btn"><i class="fas fa-search"></i></button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
+    <title>Dharma Desk</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Top Section -->
+    <header class="top-section">
+      <div class="search-container">
+        <input type="text" id="search-bar" placeholder="Search anything..." />
+        <button id="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="quick-links">
+        <a
+          href="https://github.com"
+          target="_blank"
+          class="quick-link"
+          title="GitHub"
+        >
+          <i class="fab fa-github"></i>
+        </a>
+        <a
+          href="https://youtube.com"
+          target="_blank"
+          class="quick-link"
+          title="YouTube"
+        >
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a
+          href="https://gmail.com"
+          target="_blank"
+          class="quick-link"
+          title="Gmail"
+        >
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
+    </header>
+
+    <main class="main-container">
+      <!-- Left Sidebar -->
+      <aside class="left-sidebar">
+        <div class="widget todo-widget">
+          <h3><i class="fas fa-tasks"></i> Today's Goals</h3>
+          <div class="goals-container" id="goals-container">
+            <!-- Goals will be dynamically added here -->
+          </div>
+          <button class="add-goal-btn" id="add-goal-btn">
+            <i class="fas fa-plus"></i> Add Goal
+          </button>
+        </div>
+      </aside>
+
+      <!-- Center Content -->
+      <section class="center-content">
+        <div class="center-quote">
+          <h1 id="gita-quote">"Loading Bhagavad Gita quote..."</h1>
+          <p id="gita-explanation">
+            Please wait while we fetch today's wisdom...
+          </p>
+        </div>
+      </section>
+
+      <!-- Right Sidebar -->
+      <aside class="right-sidebar">
+        <div class="widget clock-widget">
+          <h3><i class="fas fa-clock"></i> Time & Date</h3>
+          <div id="current-time" class="current-time">00:00:00</div>
+          <div id="current-date" class="current-date">Loading date...</div>
+        </div>
+
+        <div class="widget progress-widget">
+          <h3><i class="fas fa-chart-pie"></i> Today's Progress</h3>
+          <div class="progress-summary" id="progress-summary">
+            <div class="progress-stat">
+              <span class="stat-label">Goals Completed</span>
+              <span class="stat-value" id="goals-completed">0/0</span>
             </div>
-            <div class="quick-links">
-                <a href="https://github.com" target="_blank" class="quick-link" title="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://youtube.com" target="_blank" class="quick-link" title="YouTube">
-                    <i class="fab fa-youtube"></i>
-                </a>
-                <a href="https://gmail.com" target="_blank" class="quick-link" title="Gmail">
-                    <i class="fas fa-envelope"></i>
-                </a>
+            <div class="progress-ring">
+              <svg class="progress-circle" width="80" height="80">
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="30"
+                  stroke="rgba(255,255,255,0.2)"
+                  stroke-width="4"
+                  fill="none"
+                />
+                <circle
+                  id="progress-circle-fill"
+                  cx="40"
+                  cy="40"
+                  r="30"
+                  stroke="#4CAF50"
+                  stroke-width="4"
+                  fill="none"
+                  stroke-dasharray="188.5"
+                  stroke-dashoffset="188.5"
+                  transform="rotate(-90 40 40)"
+                />
+              </svg>
+              <div class="progress-percentage" id="progress-percentage">0%</div>
             </div>
-        </header>
+          </div>
+        </div>
+      </aside>
+    </main>
 
-        <main class="main-container">
-            <!-- Left Sidebar -->
-            <aside class="left-sidebar">
-                <div class="widget todo-widget">
-                    <h3><i class="fas fa-tasks"></i> Today's Goals</h3>
-                    <div class="goals-container" id="goals-container">
-                        <!-- Goals will be dynamically added here -->
-                    </div>
-                    <button class="add-goal-btn" id="add-goal-btn">
-                        <i class="fas fa-plus"></i> Add Goal
-                    </button>
-                </div>
-            </aside>
+    <!-- Bottom Section -->
+    <footer class="bottom-section">
+      <div class="daily-reminder">
+        <p id="daily-reminder-text">
+          "Don't forget to commit on GitHub today!"
+        </p>
+      </div>
+    </footer>
 
-            <!-- Center Content -->
-            <section class="center-content">
-                <div class="center-quote">
-                    <h1 id="gita-quote">"Loading Bhagavad Gita quote..."</h1>
-                    <p id="gita-explanation">Please wait while we fetch today's wisdom...</p>
-                </div>
-            </section>
+    <!-- Background Animation -->
+    <div class="floating-particles"></div>
 
-            <!-- Right Sidebar -->
-            <aside class="right-sidebar">
-                <div class="widget clock-widget">
-                    <h3><i class="fas fa-clock"></i> Time & Date</h3>
-                    <div id="current-time" class="current-time">00:00:00</div>
-                    <div id="current-date" class="current-date">Loading date...</div>
-                </div>
-                
-                <div class="widget progress-widget">
-                    <h3><i class="fas fa-chart-pie"></i> Today's Progress</h3>
-                    <div class="progress-summary" id="progress-summary">
-                        <div class="progress-stat">
-                            <span class="stat-label">Goals Completed</span>
-                            <span class="stat-value" id="goals-completed">0/0</span>
-                        </div>
-                        <div class="progress-ring">
-                            <svg class="progress-circle" width="80" height="80">
-                                <circle cx="40" cy="40" r="30" stroke="rgba(255,255,255,0.2)" stroke-width="4" fill="none"/>
-                                <circle id="progress-circle-fill" cx="40" cy="40" r="30" stroke="#4CAF50" stroke-width="4" fill="none"
-                                        stroke-dasharray="188.5" stroke-dashoffset="188.5" transform="rotate(-90 40 40)"/>
-                            </svg>
-                            <div class="progress-percentage" id="progress-percentage">0%</div>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </main>
-
-        <!-- Bottom Section -->
-        <footer class="bottom-section">
-            <div class="daily-reminder">
-                <p id="daily-reminder-text">"Don't forget to commit on GitHub today!"</p>
-            </div>
-        </footer>
-
-        <!-- Background Animation -->
-        <div class="floating-particles"></div>
-
-        <script src="index.js"></script>
-    </body>
+    <script src="index.js"></script>
+  </body>
 </html>

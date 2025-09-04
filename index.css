@@ -6,7 +6,22 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+  background: 
+    linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 30px,
+      rgba(255, 255, 255, 0.08) 30px,
+      rgba(255, 255, 255, 0.08) 31px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 30px,
+      rgba(255, 255, 255, 0.08) 30px,
+      rgba(255, 255, 255, 0.08) 31px
+    );
   height: 100vh;
   color: #333;
   overflow: hidden;
@@ -632,7 +647,7 @@ body {
   .center-content {
     order: 1;
   }
-  }
+}
   
   #gita-quote {
     font-size: 1.8rem;
@@ -641,7 +656,7 @@ body {
   #gita-explanation {
     font-size: 1.1rem;
   }
-}
+
 
 @media (max-width: 480px) {
   .center-quote {
