@@ -13,11 +13,13 @@
   <body>
     <!-- Top Section -->
     <header class="top-section">
+      <div class="top-left-spacer" aria-hidden="true"></div>
       <div class="search-container">
         <input type="text" id="search-bar" placeholder="Search anything..." />
         <button id="search-btn"><i class="fas fa-search"></i></button>
       </div>
-      <div class="quick-links">
+      <div class="top-right">
+        <div class="quick-links">
         <a
           href="https://github.com"
           target="_blank"
@@ -42,13 +44,14 @@
         >
           <i class="fas fa-envelope"></i>
         </a>
+        </div>
       </div>
     </header>
 
     <main class="main-container">
       <!-- Left Sidebar -->
       <aside class="left-sidebar">
-        <div class="widget todo-widget">
+        <div class="widget todo-widget goals-widget">
           <h3><i class="fas fa-tasks"></i> Today's Goals</h3>
           <div class="goals-container" id="goals-container">
             <!-- Goals will be dynamically added here -->
@@ -125,6 +128,27 @@
 
     <!-- Background Animation -->
     <div class="floating-particles"></div>
+
+    <!-- Theme palette (top-left) -->
+    <div id="theme-palette" class="theme-palette" aria-hidden="false">
+      <button id="current-theme-btn" class="current-theme" aria-label="Current theme" title="Current theme"></button>
+      <div id="palette-row" class="palette-row" role="menu" aria-hidden="true">
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="light" title="Light"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="dark" title="Dark"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="blue" title="Blue"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="zen" title="Zen"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="yellow" title="Yellow"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="indigo" title="Indigo"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="funny" title="Funny"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="calm" title="Calm"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="peace" title="Peace"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="genz" title="Gen Z"></div>
+          <div class="theme-dot" role="menuitem" tabindex="0" data-theme="lavender" title="Lavender"></div>
+      </div>
+    </div>
+
+  <!-- Helper toggle (starts the tour) -->
+  <div class="helper-toggle" id="helper-toggle" title="Start Tour">ℹ️</div>
 
     <script src="index.js"></script>
   </body>

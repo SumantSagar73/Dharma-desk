@@ -168,20 +168,9 @@ function updateProgressDisplay() {
   const percentage =
     totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
 
-  // Get progress widget element
-  const progressWidget = document.querySelector(".progress-widget");
-
-  // Hide progress widget if no goals with text
-  if (totalGoals === 0) {
-    if (progressWidget) {
-      progressWidget.style.display = "none";
-    }
-    return;
-  } else {
-    if (progressWidget) {
-      progressWidget.style.display = "block";
-    }
-  }
+  // Note: do not toggle visibility here. Let CSS decide initial visibility and
+  // keep JS focused on updating values only. This prevents the progress widget
+  // from being forcibly hidden on load when the UI should control it.
 
   // Update stats
   const goalsCompletedEl = document.getElementById("goals-completed");
@@ -580,8 +569,8 @@ function fetchRandomGitaQuote() {
         // Display the Sanskrit verse, Hindi translation, and English translation
         document.getElementById("gita-quote").textContent = `"${cleanSlok}"`;
         document.getElementById("gita-explanation").innerHTML = `
-          <div style="margin-bottom: 10px; color: rgba(255, 255, 255, 0.9);">${cleanHindi}</div>
-          <div style="color: rgba(255, 255, 255, 0.8); font-style: italic;">${cleanEnglish}</div>
+          <div class="gita-hindi">${cleanHindi}</div>
+          <div class="gita-english">${cleanEnglish}</div>
         `;
       })
       .catch((error) => {
@@ -608,12 +597,209 @@ function fetchRandomGitaQuote() {
         const randomFallback = fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
         document.getElementById("gita-quote").textContent = `"${randomFallback.slok}"`;
         document.getElementById("gita-explanation").innerHTML = `
-          <div style="margin-bottom: 10px; color: rgba(255, 255, 255, 0.9);">${randomFallback.hindi}</div>
-          <div style="color: rgba(255, 255, 255, 0.8); font-style: italic;">${randomFallback.english}</div>
+          <div class="gita-hindi">${randomFallback.hindi}</div>
+          <div class="gita-english">${randomFallback.english}</div>
         `;
       });
   }, 100); // Small delay to avoid rapid calls
 }
+
+/* ==== Theme selector & helper overlay (minimal) ==== */
+(function(){
+  function safe(id){return document.getElementById(id)}
+  const root = document.documentElement;
+  const themeDots = safe('theme-dots');
+  const saved = localStorage.getItem('theme') || 'light';
+  function applyTheme(t){
+    if(t === 'light') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+    document.querySelectorAll('.theme-dot').forEach(d=> d.classList.toggle('selected', d.dataset.theme===t));
+  }
+  // apply saved theme on load
+  try{ applyTheme(saved); }catch(e){/*silent*/}
+  if(themeDots){
+    // Keep old bulk handler for backward compatibility (not visible) but also wire the new palette
+    themeDots.addEventListener('click', (e)=>{
+      const dot = e.target.closest('.theme-dot'); if(!dot) return; applyTheme(dot.dataset.theme);
+    });
+  }
+
+  // New: theme mini-palette behavior
+  const palette = document.getElementById('theme-palette');
+  const paletteRow = document.getElementById('palette-row');
+  const currentBtn = document.getElementById('current-theme-btn');
+  function setCurrentCircle(theme){
+    // find the dot style and copy its background into the current button
+    const match = paletteRow.querySelector(`.theme-dot[data-theme="${theme}"]`);
+    if(match){
+      const bg = window.getComputedStyle(match).background;
+      currentBtn.style.background = bg;
+      // mark selected inside palette
+      paletteRow.querySelectorAll('.theme-dot').forEach(d=> d.classList.toggle('selected', d.dataset.theme===theme));
+    }
+  }
+
+  if(palette && paletteRow && currentBtn){
+    // Show saved theme on the current button
+    setCurrentCircle(localStorage.getItem('theme') || 'light');
+
+    currentBtn.addEventListener('click', (e)=>{
+      const opened = paletteRow.getAttribute('aria-hidden') === 'false';
+      paletteRow.setAttribute('aria-hidden', opened ? 'true' : 'false');
+      currentBtn.setAttribute('aria-expanded', opened ? 'false' : 'true');
+      // move focus into first dot when opening
+      if(!opened){
+        const first = paletteRow.querySelector('.theme-dot'); if(first) first.focus();
+      }
+    });
+
+    // Click on a palette dot
+    paletteRow.addEventListener('click', (e)=>{
+      const dot = e.target.closest('.theme-dot'); if(!dot) return;
+      const t = dot.dataset.theme; applyTheme(t); setCurrentCircle(t);
+      paletteRow.setAttribute('aria-hidden','true');
+      currentBtn.setAttribute('aria-expanded','false');
+      currentBtn.focus();
+    });
+
+    // Close palette on outside click
+    document.addEventListener('click', (e)=>{
+      if(!palette.contains(e.target)){
+        paletteRow.setAttribute('aria-hidden','true');
+      }
+    });
+
+    // Keyboard interactions: Enter/Space to toggle, ArrowLeft/ArrowRight to navigate, Escape to close
+    currentBtn.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); currentBtn.click(); }
+      else if(e.key === 'ArrowRight' || e.key === 'ArrowLeft'){
+        // open then focus first if not open
+        const opened = paletteRow.getAttribute('aria-hidden') === 'false';
+        if(!opened){ currentBtn.click(); }
+      }
+    });
+
+    paletteRow.addEventListener('keydown', (e)=>{
+      const dots = Array.from(paletteRow.querySelectorAll('.theme-dot'));
+      const idx = dots.indexOf(document.activeElement);
+      if(e.key === 'ArrowRight'){
+        e.preventDefault(); const next = dots[(idx+1) % dots.length]; if(next) next.focus();
+      } else if(e.key === 'ArrowLeft'){
+        e.preventDefault(); const prev = dots[(idx-1 + dots.length) % dots.length]; if(prev) prev.focus();
+      } else if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault(); const el = document.activeElement; if(el && el.classList.contains('theme-dot')){ el.click(); }
+      } else if(e.key === 'Escape'){
+        paletteRow.setAttribute('aria-hidden','true'); currentBtn.setAttribute('aria-expanded','false'); currentBtn.focus();
+      }
+    });
+  }
+
+  // helper toggle: start the tour directly when the helper button is clicked
+  const helperToggle = safe('helper-toggle');
+  if (helperToggle) {
+    helperToggle.addEventListener('click', () => {
+      // start the guided tour
+      if (typeof startTour === 'function') startTour();
+    });
+  }
+
+  // Guided tour
+  const startTourBtn = safe('start-tour');
+  const tourSteps = [
+    { sel: '.todo-widget', title: "Today's Goals", text: 'Add up to 5 goals. Check them off as you progress.' },
+    { sel: '.search-container', title: 'Search', text: 'The search bar is centered in the header — type queries here or press Enter to search.' },
+    { sel: '#theme-palette', title: 'Theme Switcher', text: 'Click the small circle to open a mini-palette of themes and change the look quickly.' },
+    { sel: '.center-quote', title: 'Daily Wisdom', text: 'A Bhagavad Gita quote appears here to reflect on.' },
+    { sel: '.quick-links', title: 'Quick Links', text: 'Your most-used sites live here for quick access.' },
+    { sel: '.progress-widget', title: 'Progress', text: 'Shows how many goals you have completed today.' },
+    { sel: '.clock-widget', title: 'Time & Date', text: 'Current time and date are shown here.' }
+  ];
+
+  function createTourElements(){
+    let overlay = document.createElement('div'); overlay.className='tour-overlay';
+    let highlight = document.createElement('div'); highlight.className='tour-highlight';
+    let tooltip = document.createElement('div'); tooltip.className='tour-tooltip';
+    tooltip.innerHTML = '<div class="tour-content"></div><div class="tour-controls"><button class="prev">Prev</button><button class="next">Next</button><button class="close">Close</button></div>';
+    // enforce strong contrast for tooltip background so tour text is readable in all themes
+    tooltip.style.background = 'rgba(0,0,0,0.75)';
+    tooltip.style.color = 'white';
+    overlay.appendChild(highlight); overlay.appendChild(tooltip); document.body.appendChild(overlay);
+    return {overlay, highlight, tooltip};
+  }
+
+  function startTour(){
+    if(!document.body.querySelector('.tour-overlay')) var els = createTourElements();
+    const overlay = document.querySelector('.tour-overlay');
+    const highlight = overlay.querySelector('.tour-highlight');
+    const tooltip = overlay.querySelector('.tour-tooltip');
+    let idx = 0;
+    function showStep(i){
+      const step = tourSteps[i];
+      const target = document.querySelector(step.sel);
+      if(!target) return;
+      // If this step is the theme palette, open the palette so it is visible to the user.
+      try{
+        if(step.sel === '#theme-palette' && palette && paletteRow && currentBtn){
+          paletteRow.setAttribute('aria-hidden','false');
+          currentBtn.setAttribute('aria-expanded','true');
+          // ensure the palette shows up before computing bounds
+        } else if(palette && paletteRow && currentBtn){
+          // close the palette for other steps to avoid accidental overlap
+          paletteRow.setAttribute('aria-hidden','true');
+          currentBtn.setAttribute('aria-expanded','false');
+        }
+      }catch(e){/*ignore*/}
+      const rect = target.getBoundingClientRect();
+      // position highlight
+      highlight.style.top = (rect.top - 8) + 'px';
+      highlight.style.left = (rect.left - 8) + 'px';
+      highlight.style.width = (rect.width + 16) + 'px';
+      highlight.style.height = (rect.height + 16) + 'px';
+      // set tooltip content and position to the right or below
+      tooltip.querySelector('.tour-content').innerHTML = `<strong>${step.title}</strong><div style="margin-top:6px;color:var(--muted);">${step.text}</div>`;
+      // if this is the theme palette step, visually highlight the palette
+      try{
+        if(step.sel === '#theme-palette' && palette){
+          palette.classList.add('highlighted');
+          if(typeof helperToggle !== 'undefined' && helperToggle) helperToggle.classList.add('active');
+        } else if(palette){
+          palette.classList.remove('highlighted');
+          if(typeof helperToggle !== 'undefined' && helperToggle) helperToggle.classList.remove('active');
+        }
+      }catch(e){/*ignore*/}
+      // prefer right side
+      let ttTop = rect.top;
+      let ttLeft = rect.right + 12;
+      if(ttLeft + 280 > window.innerWidth) { ttLeft = rect.left; ttTop = rect.bottom + 12; }
+      tooltip.style.top = ttTop + 'px'; tooltip.style.left = ttLeft + 'px';
+      // update controls
+      tooltip.querySelector('.prev').disabled = i===0;
+      tooltip.querySelector('.next').textContent = i === tourSteps.length-1 ? 'Finish' : 'Next';
+    }
+    overlay.style.display = 'block';
+    showStep(idx);
+    // Use event delegation for controls in case elements are recreated
+    function onControlClick(e){
+      const btn = e.target.closest('button'); if(!btn) return;
+      if(btn.classList.contains('next')){
+        idx++;
+        if(idx >= tourSteps.length){
+          overlay.style.display='none'; document.removeEventListener('click', onControlClick);
+          // remove any highlights
+          try{ if(palette) palette.classList.remove('highlighted'); if(helperToggle) helperToggle.classList.remove('active'); }catch(e){}
+        } else showStep(idx);
+      }
+      else if(btn.classList.contains('prev')){ if(idx>0){ idx--; showStep(idx); } }
+      else if(btn.classList.contains('close')){ overlay.style.display='none'; document.removeEventListener('click', onControlClick);
+        try{ if(palette) palette.classList.remove('highlighted'); if(helperToggle) helperToggle.classList.remove('active'); }catch(e){}
+      }
+    }
+    document.addEventListener('click', onControlClick);
+  }
+
+  if(startTourBtn) startTourBtn.addEventListener('click', ()=>{ startTour(); });
+})();
 
 // Refresh quote every 30 seconds
 setInterval(fetchRandomGitaQuote, 30000);
