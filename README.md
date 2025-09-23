@@ -94,3 +94,35 @@ It's nothing revolutionary, just a small attempt to bring a bit more intentional
 Built with care (and probably too much coffee) by [SumantSagar73](https://github.com/SumantSagar73)
 
 _May your goals be clear and your wisdom timeless_ ✨
+
+---
+
+## Updated features
+
+This project has received several recent improvements to the UI, UX, accessibility, and theming. Here's a concise list of what's new:
+
+- Theme system
+	- Multiple new themes added (e.g. `blue`, `dark`, `zen`, `yellow`, `indigo`, `funny`, `calm`, `peace`, `genz`, `lavender`).
+	- Theme selection persistence using `localStorage` so your preference remains across sessions.
+	- A compact top-left mini-palette: a small current-theme circle that opens a horizontal row of theme icons when clicked.
+
+- Accessibility and keyboard support
+	- The theme palette is keyboard accessible: `tabindex` on theme icons, Enter/Space to select, Arrow keys to navigate, and Escape to close.
+	- Visible focus styles and tooltips appear on focus so keyboard users can see and read theme names.
+	- `aria` attributes added for assistive technologies (`aria-hidden`, `aria-expanded`, `role=\"menuitem\"`).
+
+- Guided helper (tour)
+	- A guided tour (`ℹ️` helper) now walks users through key UI parts: Today's Goals, the centered Search, Theme Switcher, Daily Wisdom, Quick Links, Progress, and Clock.
+	- The tour opens the theme mini-palette automatically during the Theme Switcher step and highlights it so it's easy to find.
+	- Tour tooltips have been made more readable (opaque background and higher z-index) so text is legible across themes.
+
+- Visual & interaction fixes
+	- The cross icon on Today's Goals removal button no longer animates to avoid accidental visual distraction.
+	- The search bar has been moved/centered in the header for a clean layout.
+	- Theme icons receive brighter borders in dark themes so they remain visible.
+
+- Small UX niceties
+	- Tooltips on theme icons show on both hover and keyboard focus.
+	- The current theme button shows the selected theme's color so theme changes are immediately visible.
+
+If you'd like more details about any of these changes (code pointers, specific CSS variables to tweak, or adding more themes), open an issue or send a PR — I'd be glad to collaborate.

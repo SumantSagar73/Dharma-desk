@@ -274,6 +274,7 @@ body {
   --text: #ffffff;
   --muted: #cbd5e1;
   --accent: #3b82f6;
+  --theme-dot-border: rgba(0,0,0,0.06);
 }
 /* Alias 'blue' to previous default light theme for nicer naming */
 :root[data-theme="blue"] {
@@ -430,6 +431,46 @@ html, body {
 .palette-row[aria-hidden="true"]{ opacity:0; pointer-events:none; transform: scaleX(0.6); }
 .palette-row[aria-hidden="false"]{ opacity:1; pointer-events:auto; transform: scaleX(1); }
 .palette-row .theme-dot { width: 22px; height:22px; border:1px solid rgba(0,0,0,0.06); }
+/* use variable for easier tuning */
+.palette-row .theme-dot { border: 1px solid var(--theme-dot-border); position: relative; }
+
+/* show a small tooltip on focus or hover so keyboard users can read the theme name */
+.palette-row .theme-dot::after{
+  display: none;
+  content: attr(title);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -34px;
+  background: rgba(0,0,0,0.78);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .12s ease, transform .12s ease;
+}
+.palette-row .theme-dot:focus::after,
+.palette-row .theme-dot:hover::after,
+.palette-row .theme-dot:focus-visible::after{
+  display: block; opacity: 1; transform: translateX(-50%) translateY(-2px);
+}
+
+/* stronger visible focus/glow for dark themes so keyboard users easily see the focused dot */
+:root[data-theme="dark"] .palette-row .theme-dot,
+:root[data-theme="genz"] .palette-row .theme-dot{
+  /* keep border brighter on dark backgrounds */
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+:root[data-theme="dark"] .palette-row .theme-dot:focus-visible,
+:root[data-theme="genz"] .palette-row .theme-dot:focus-visible{
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.08), 0 8px 20px rgba(0,0,0,0.45);
+  transform: scale(1.06);
+  border-color: var(--accent);
+}
 /* Brighter borders for dark backgrounds so dots remain visible */
 :root[data-theme="dark"] .palette-row .theme-dot,
 :root[data-theme="genz"] .palette-row .theme-dot{
